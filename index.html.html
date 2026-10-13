@@ -6,6 +6,9 @@
     <title>Quiz: สนุกกับ Raspberry Pi - สัปดาห์ที่ 1</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
+        * {
+            box-sizing: border-box;
+        }
         body {
             font-family: 'Prompt', sans-serif;
             background: linear-gradient(135deg, #1e1b4b, #312e81, #4338ca);
@@ -21,62 +24,139 @@
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 30px;
+            padding: 25px;
             border-radius: 20px;
             width: 100%;
-            max-width: 600px;
+            max-width: 500px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             text-align: center;
         }
-        h1 { font-size: 1.8rem; margin-bottom: 10px; color: #38bdf8; }
-        .login-box, #quiz-container, .score-container { display: none; }
-        .login-box.active, #quiz-container.active, .score-container.active { display: block; }
+        h1 { 
+            font-size: 1.6rem; 
+            margin-top: 0;
+            margin-bottom: 15px; 
+            color: #38bdf8; 
+        }
+        
+        .login-box, #quiz-container, .score-container { 
+            display: none; 
+        }
+        .login-box.active, #quiz-container.active, .score-container.active { 
+            display: block; 
+        }
         
         input[type="text"] {
-            width: 80%;
-            padding: 12px;
+            width: 90%;
+            padding: 12px 15px;
             border-radius: 10px;
             border: 1px solid rgba(255,255,255,0.3);
-            background: rgba(0,0,0,0.2);
+            background: rgba(0,0,0,0.25);
             color: #fff;
             font-family: 'Prompt', sans-serif;
             font-size: 1rem;
-            margin: 15px 0;
+            margin: 15px 0 20px 0;
             text-align: center;
+            outline: none;
         }
-        input[type="text"]::placeholder { color: #94a3b8; }
+        input[type="text"]::placeholder { 
+            color: #94a3b8; 
+        }
         
-        .start-btn, .choice-btn, .restart-btn {
+        .start-btn, .choice-btn, #next-btn {
             font-family: 'Prompt', sans-serif;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
         }
         .start-btn {
-            background: #38bdf8; color: #0f172a; border: none;
-            padding: 12px 30px; border-radius: 10px; font-size: 1rem; font-weight: 600;
+            background: #38bdf8; 
+            color: #0f172a; 
+            border: none;
+            padding: 12px 30px; 
+            border-radius: 10px; 
+            font-size: 1rem; 
+            font-weight: 600;
+            width: 90%;
         }
-        .start-btn:hover { background: #0ea5e9; }
+        .start-btn:hover { 
+            background: #0ea5e9; 
+        }
 
-        #progress { font-size: 0.9rem; color: #cbd5e1; margin-bottom: 20px; }
-        .question-box { font-size: 1.2rem; margin-bottom: 20px; font-weight: 600; min-height: 60px; text-align: left; }
-        .choices { display: flex; flex-direction: column; gap: 12px; }
-        .choice-btn {
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: #fff; padding: 12px 20px; border-radius: 10px;
-            font-size: 1rem; text-align: left;
+        #progress { 
+            font-size: 0.85rem; 
+            color: #cbd5e1; 
+            margin-bottom: 15px; 
+            text-align: left;
         }
-        .choice-btn:hover:not(:disabled) { background: rgba(56, 189, 248, 0.3); border-color: #38bdf8; }
-        .choice-btn.correct { background: #22c55e !important; border-color: #16a34a !important; }
-        .choice-btn.incorrect { background: #ef4444 !important; border-color: #dc2626 !important; }
+        .question-box { 
+            font-size: 1.1rem; 
+            margin-bottom: 20px; 
+            font-weight: 600; 
+            min-height: 55px; 
+            text-align: left; 
+            line-height: 1.5;
+        }
+        .choices { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 10px; 
+        }
+        .choice-btn {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #fff; 
+            padding: 12px 15px; 
+            border-radius: 10px;
+            font-size: 0.95rem; 
+            text-align: left;
+            line-height: 1.4;
+        }
+        .choice-btn:hover:not(:disabled) { 
+            background: rgba(56, 189, 248, 0.25); 
+            border-color: #38bdf8; 
+        }
+        .choice-btn.correct { 
+            background: #22c55e !important; 
+            border-color: #16a34a !important; 
+            color: #fff !important;
+        }
+        .choice-btn.incorrect { 
+            background: #ef4444 !important; 
+            border-color: #dc2626 !important; 
+            color: #fff !important;
+        }
         
         #next-btn {
-            margin-top: 25px; background: #38bdf8; color: #0f172a; border: none;
-            padding: 10px 25px; border-radius: 8px; font-size: 1rem; font-weight: 600;
-            display: none; cursor: pointer;
+            margin-top: 20px; 
+            background: #38bdf8; 
+            color: #0f172a; 
+            border: none;
+            padding: 10px 25px; 
+            border-radius: 8px; 
+            font-size: 1rem; 
+            font-weight: 600;
+            display: none; 
+            width: 100%;
         }
-        .score-container h2 { font-size: 2.2rem; color: #4ade80; }
-        .loading-text { font-size: 0.9rem; color: #38bdf8; margin-top: 10px; display: none; }
+
+        .score-container h2 { 
+            font-size: 2rem; 
+            color: #4ade80; 
+            margin-bottom: 10px;
+        }
+        #final-score {
+            font-size: 3rem;
+            margin: 10px 0;
+            color: #38bdf8;
+        }
+        .loading-text { 
+            font-size: 0.9rem; 
+            color: #38bdf8; 
+            margin-top: 20px; 
+            background: rgba(0,0,0,0.2);
+            padding: 8px 12px;
+            border-radius: 8px;
+            display: none; 
+        }
     </style>
 </head>
 <body>
@@ -84,15 +164,15 @@
     <div class="container">
         <h1>🍓 Raspberry Pi Quiz</h1>
         
-        <!-- หน้าลงทะเบียนก่อนเล่น -->
+        <!-- หน้าที่ 1: ลงทะเบียนก่อนทำ -->
         <div class="login-box active" id="login-box">
-            <p>กรุณากรอกชื่อ-นามสกุล หรือชื่อเล่น ก่อนเริ่มทำแบบทดสอบ</p>
-            <input type="text" id="student-name" placeholder="เช่น ด.ช.รักเรียน โคדי้ง" autocomplete="off">
+            <p>กรุณากรอกชื่อ-นามสกุล หรือชื่อเล่น<br>ก่อนเริ่มทำแบบทดสอบครับ</p>
+            <input type="text" id="student-name" placeholder="เช่น น้องก็อต CPE" autocomplete="off">
             <br>
             <button class="start-btn" onclick="startQuiz()">เริ่มทำแบบทดสอบ 🚀</button>
         </div>
 
-        <!-- หน้าคำถาม -->
+        <!-- หน้าที่ 2: ทำแบบทดสอบ -->
         <div id="quiz-container">
             <div id="progress">คำถามที่ 1 จาก 5</div>
             <div class="question-box" id="question-text"></div>
@@ -100,45 +180,70 @@
             <button id="next-btn" onclick="nextQuestion()">ข้อถัดไป ➔</button>
         </div>
 
-        <!-- หน้าสรุปผลคะแนน -->
+        <!-- หน้าที่ 3: สรุปผลและส่งคะแนน -->
         <div class="score-container" id="score-container">
-            <h2>🎉 ยินดีด้วยครับ!</h2>
-            <p id="player-greeting"></p>
-            <p>คะแนนที่คุณทำได้</p>
+            <h2>🎉 ทำแบบทดสอบเสร็จแล้ว!</h2>
+            <p id="player-greeting" style="font-size: 1.1rem; color: #cbd5e1;"></p>
+            <p style="margin-bottom: 0;">คะแนนที่คุณทำได้</p>
             <h1 id="final-score">0 / 5</h1>
-            <p id="score-comment"></p>
+            <p id="score-comment" style="font-weight: 600; font-size: 1.1rem;"></p>
             <div class="loading-text" id="loading-save">กำลังบันทึกคะแนนเข้าสู่ระบบ... ⏳</div>
         </div>
     </div>
 
     <script>
-        // ** ⚠️ นำ URL ของ Google Apps Script ที่ได้จากการ Deploy มาวางแทนที่ข้อความด้านล่างนี้ **
-        const SCRIPT_URL = "const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwiRxiSGLaO1tWWIaYxVl7DWGcwKJStGX_OEdsxJYCRiTH9Lggpz8lX6yl_BcunKBAIVw/exec";
+        // URL ของ Google Apps Script Web App
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwiRxiSGLaO1tWWIaYxVl7DWGcwKJStGX_OEdsxJYCRiTH9Lggpz8lX6yl_BcunKBAIVw/exec";
 
         const quizData = [
             {
                 question: "1. ทำไมบอร์ดคอมพิวเตอร์จิ๋วเครื่องนี้ถึงชื่อว่า 'Raspberry Pi' โดยคำว่า 'Pi' มาจากอะไร?",
-                choices: ["ก) ขนมพายรสราสเบอร์รี่", "ข) มาจากภาษา Python", "ค) ย่อมาจาก Pixel", "ง) มาจากค่าพาย Math Pi"],
+                choices: [
+                    "ก) เป็นชื่อขนมพายรสราสเบอร์รี่", 
+                    "ข) มาจากชื่อภาษา Python", 
+                    "ค) ย่อมาจากคำว่า Pixel ความคมชัดสูง", 
+                    "ง) มาจากค่าทางคณิตศาสตร์ (Math Pi)"
+                ],
                 correct: 1
             },
             {
-                question: "2. ข้อใดคือ 'จุดเด่น' ของ Raspberry Pi ที่ต่างจากคอมพิวเตอร์ทั่วไปมากที่สุด?",
-                choices: ["ก) เล่นเกม 3D หนักๆ ได้ดีกว่า", "ข) ใช้พลังงานแสงอาทิตย์อย่างเดียว", "ค) ตัวเล็กเท่าบัตรเครดิต มีขา GPIO ต่อวงจรได้", "ง) ราคาแพงกว่าโน้ตบุ๊ก 2 เท่า"],
+                question: "2. ข้อใดคือ 'จุดเด่น' ของ Raspberry Pi ที่แตกต่างจากคอมพิวเตอร์ทั่วไปมากที่สุด?",
+                choices: [
+                    "ก) เล่นเกม 3D หนักๆ ได้ดีกว่าคอมพิวเตอร์ทั่วไป", 
+                    "ข) ไม่ต้องใช้ไฟฟ้าเลย ใช้พลังงานแสงอาทิตย์อย่างเดียว", 
+                    "ค) ตัวเล็กเท่าบัตรเครดิต และมีขา GPIO ต่อวงจรภายนอกได้", 
+                    "ง) มีราคาแพงกว่าโน้ตบุ๊กทั่วไป 2 เท่า"
+                ],
                 correct: 2
             },
             {
-                question: "3. หากเราต้องการใส่ระบบปฏิบัติการ (OS) ให้ Pi เราต้องใช้อุปกรณ์ชิ้นใด?",
-                choices: ["ก) แผ่นซีดีรอม", "ข) แฟลชไดรฟ์ USB ทั่วไป", "ค) MicroSD Card", "ง) สายชาร์จมือถือ"],
+                question: "3. หากเราต้องการใส่ระบบปฏิบัติการ (OS) ให้ Raspberry Pi เราต้องใส่อุปกรณ์ชิ้นใดลงไปใต้บอร์ด?",
+                choices: [
+                    "ก) แผ่นซีดีเกม (CD-ROM)", 
+                    "ข) แฟลชไดรฟ์ USB ทั่วไป", 
+                    "ค) MicroSD Card (การ์ดหน่วยความจำขนาดเล็ก)", 
+                    "ง) สายชาร์จแบตเตอรี่มือถือ"
+                ],
                 correct: 2
             },
             {
                 question: "4. ข้อใดกล่าวถึงการจ่ายไฟให้แก่ Raspberry Pi ได้ถูกต้องที่สุด?",
-                choices: ["ก) ต้องเสียบปลั๊กไฟบ้าน 220V เท่านั้น", "ข) ใช้ไฟต่ำ ใช้กับ Power Bank หรือหัวชาร์จมือถือได้", "ค) มีแบตเตอรี่ในตัว เปิดได้ 24 ชม.", "ง) ใช้ไฟจากจอผ่านสาย HDMI อย่างเดียว"],
+                choices: [
+                    "ก) ต้องเสียบปลั๊กไฟบ้าน 220V โดยตรงเท่านั้น", 
+                    "ข) ใช้พลังงานต่ำมาก สามารถใช้ไฟจาก Power Bank หรือหัวชาร์จมือถือได้", 
+                    "ค) มีแบตเตอรี่ในตัวเครื่อง เปิดใช้งานได้ตลอด 24 ชั่วโมง", 
+                    "ง) ใช้พลังงานจากหน้าจอคอมพิวเตอร์ผ่านสาย HDMI อย่างเดียว"
+                ],
                 correct: 1
             },
             {
-                question: "5. เราได้ทดลองเขียนโค้ดภาษา Python สั่งงานเบื้องต้นผ่านโปรแกรมอะไร?",
-                choices: ["ก) Microsoft Word", "ข) Thonny Python IDE", "ค) Adobe Photoshop", "ง) Minecraft"],
+                question: "5. ในชั่วโมงปฏิบัติการ เราได้ทดลองเขียนโค้ดภาษา Python สั่งงานเบื้องต้นผ่านโปรแกรมอะไร?",
+                choices: [
+                    "ก) Microsoft Word", 
+                    "ข) Thonny Python IDE", 
+                    "ค) Adobe Photoshop", 
+                    "ง) Minecraft"
+                ],
                 correct: 1
             }
         ];
@@ -151,7 +256,7 @@
         function startQuiz() {
             const nameInput = document.getElementById("student-name").value.trim();
             if (!nameInput) {
-                alert("รบกวนกรอกชื่อก่อนเริ่มเล่นด้วยนะครับ!");
+                alert("กรุณากรอกชื่อก่อนเริ่มเล่นด้วยนะครับ!");
                 return;
             }
             playerName = nameInput;
@@ -196,7 +301,7 @@
             Array.from(allBtns).forEach(btn => btn.disabled = true);
 
             if (currentQuestion < quizData.length - 1) {
-                document.getElementById("next-btn").style.display = "inline-block";
+                document.getElementById("next-btn").style.display = "block";
             } else {
                 setTimeout(showScore, 1000);
             }
@@ -214,7 +319,7 @@
             document.getElementById("final-score").innerText = `${score} / ${quizData.length}`;
             
             if (score === 5) {
-                document.getElementById("score-comment").innerText = "สุดยอด! คว้าเต็มไปเลย 🌟";
+                document.getElementById("score-comment").innerText = "สุดยอด! คว้าคะแนนเต็มไปเลย 🌟";
             } else if (score >= 3) {
                 document.getElementById("score-comment").innerText = "เก่งมาก ผ่านฉลุย! 👍";
             } else {
@@ -226,9 +331,10 @@
         }
 
         function saveScoreToSheets() {
-            if (SCRIPT_URL === "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE") return;
+            if (!SCRIPT_URL) return;
             
-            document.getElementById("loading-save").style.display = "block";
+            const loadingElem = document.getElementById("loading-save");
+            loadingElem.style.display = "block";
             
             const data = {
                 name: playerName,
@@ -242,9 +348,9 @@
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data)
             }).then(() => {
-                document.getElementById("loading-save").innerText = "บันทึกคะแนนเรียบร้อยแล้ว! ✅";
+                loadingElem.innerText = "บันทึกคะแนนเข้าสู่ระบบเรียบร้อยแล้ว! ✅";
             }).catch(() => {
-                document.getElementById("loading-save").innerText = "บันทึกคะแนนไม่สำเร็จ (เกิดข้อผิดพลาดเน็ต)";
+                loadingElem.innerText = "บันทึกคะแนนไม่สำเร็จ (โปรดตรวจสอบอินเทอร์เน็ต)";
             });
         }
     </script>
